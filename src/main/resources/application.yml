@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    # same comment as at docker-compose.yml, should split to profiles and use env variables
+    url: jdbc:postgresql://localhost:5432/yawp
+    username: user
+    password: password
+
+  flyway:
+    user: user
+    password: password
+    url: jdbc:postgresql://localhost:5432/yawp
+    locations: classpath:db/migration
+    enabled: true
+

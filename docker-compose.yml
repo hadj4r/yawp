@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  db:
+    build:
+      context: .
+      dockerfile: postgres-v15.1.dockerfile
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      # just for demo hardcoded values, should set via env variables
+      POSTGRES_DB: yawp
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
