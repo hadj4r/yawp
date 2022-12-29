@@ -1,13 +1,34 @@
 version: '3.7'
 
 services:
+  app:
+    image: eclipse-temurin:17-jdk-alpine
+    working_dir: /app
+    volumes:
+      - ./target:/app
+    ports:
+      - "8080:8080"
+    networks:
+      - yawp
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/yawp
+      SPRING_FLYWAY_URL: jdbc:postgresql://db:5432/yawp
+      SPRING_DATA_REDIS_HOST: cache
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATA_REDIS_PASSWORD: supersecret!
+    command: java -jar yawp-0.0.1-SNAPSHOT.jar
+    depends_on:
+      - db
+      - cache
   db:
     build:
       context: .
-      dockerfile: postgres-v15.1.dockerfile
+      dockerfile: postgres-v15.1.Dockerfile
     restart: always
     ports:
       - "5432:5432"
+    networks:
+      - yawp
     environment:
       # just for demo hardcoded values, should set via env variables
       POSTGRES_DB: yawp
@@ -18,4 +39,9 @@ services:
     restart: always
     ports:
       - '6379:6379'
+    networks:
+      - yawp
     command: redis-server --save 20 1 --loglevel warning --requirepass supersecret!
+
+networks:
+  yawp:

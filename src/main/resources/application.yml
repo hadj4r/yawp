@@ -4,12 +4,13 @@ spring:
     url: jdbc:postgresql://localhost:5432/yawp
     username: user
     password: password
-    #    show hibernate sql
+
   jpa:
     properties:
       hibernate:
         format_sql: true
-        show_sql: true
+        show_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
   flyway:
     user: user
@@ -17,6 +18,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/yawp
     locations: classpath:db/migration
     enabled: true
+    baseline-on-migrate: true
 
   data:
     redis:
@@ -40,4 +42,3 @@ api:
   description: Users API
   server:
     url: http://localhost:8080/
-#    eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huIiwiZXhwIjo5MjIzMzcyMDM2ODU0Nzc1LCJpYXQiOjE2NzIzMjM2NDksInVzZXJJZCI6ImY5NTEyZjI4LWFkMmMtNGIwYS1hOTA5LTY4OTdkOWJiNGI2NiJ9.DhdpF-ZZkGfU4Bp7DSuWJHPBTFAb8nL0sMGgkLhYHlM:
