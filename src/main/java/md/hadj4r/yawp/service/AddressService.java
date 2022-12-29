@@ -2,8 +2,10 @@ package md.hadj4r.yawp.service;
 
 import java.util.UUID;
 import md.hadj4r.yawp.api.dto.address.request.AddressUpdateParam;
-import md.hadj4r.yawp.api.dto.address.response.AddressInfo;
+import md.hadj4r.yawp.model.db.Address;
 
 public interface AddressService {
-    AddressInfo updateAddress(UUID userId, AddressUpdateParam addressUpdateParam);
+    Address updateAddress(UUID userId, AddressUpdateParam addressUpdateParam);
+
+    Address getAddress(UUID userId);
 }

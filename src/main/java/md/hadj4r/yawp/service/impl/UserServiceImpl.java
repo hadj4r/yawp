@@ -3,10 +3,8 @@ package md.hadj4r.yawp.service.impl;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import md.hadj4r.yawp.api.dto.user.request.UserUpdateParam;
-import md.hadj4r.yawp.api.dto.user.response.UserInfo;
 import md.hadj4r.yawp.config.security.CustomClaims;
 import md.hadj4r.yawp.exception.UserUpdateNotPossibleException;
-import md.hadj4r.yawp.mapper.UserMapper;
 import md.hadj4r.yawp.model.db.User;
 import md.hadj4r.yawp.repository.UserRepository;
 import md.hadj4r.yawp.service.TokenBlacklistService;
@@ -22,11 +20,9 @@ public class UserServiceImpl implements UserService {
     private final TokenBlacklistService tokenBlacklistService;
 
     @Override
-    public UserInfo getUserById(final UUID userId) {
+    public User getUserById(final UUID userId) {
         // not using optional bcs we are sure that user exists (taking id from JWT)
-        final User user = userRepository.getUserWithAddressById(userId);
-
-        return UserMapper.INSTANCE.map(user);
+        return userRepository.getUserWithAddressById(userId);
     }
 
     @Override
@@ -41,12 +37,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInfo updateUser(final UUID userId, final UserUpdateParam userUpdateParam) {
+    public User updateUser(final UUID userId, final UserUpdateParam userUpdateParam) {
         final User user = userRepository.getReferenceById(userId);
 
         updateUser(user, userUpdateParam);
 
-        return UserMapper.INSTANCE.map(user);
+        return user;
     }
 
     private void updateUser(final User user, final UserUpdateParam userUpdateParam) {

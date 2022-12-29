@@ -3,7 +3,9 @@ package md.hadj4r.yawp.api.controller;
 import lombok.RequiredArgsConstructor;
 import md.hadj4r.yawp.api.dto.user.request.UserUpdateParam;
 import md.hadj4r.yawp.api.dto.user.response.UserInfo;
+import md.hadj4r.yawp.assembler.UserModelAssembler;
 import md.hadj4r.yawp.config.security.CustomClaims;
+import md.hadj4r.yawp.model.db.User;
 import md.hadj4r.yawp.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import static org.springframework.hateoas.MediaTypes.HAL_JSON_VALUE;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RestController
@@ -20,10 +23,12 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final UserModelAssembler userModelAssembler;
 
-    @GetMapping
+    @GetMapping(produces = HAL_JSON_VALUE)
     public ResponseEntity<UserInfo> getUser(CustomClaims token) {
-        final UserInfo userInfo = userService.getUserById(token.getUserId());
+        final User user = userService.getUserById(token.getUserId());
+        final UserInfo userInfo = userModelAssembler.toModel(user);
 
         return ResponseEntity.ok(userInfo);
     }
@@ -36,9 +41,10 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping
+    @PatchMapping(produces = HAL_JSON_VALUE)
     public ResponseEntity<UserInfo> updateUser(CustomClaims claims, @RequestBody UserUpdateParam userUpdateParam) {
-        final UserInfo userInfo = userService.updateUser(claims.getUserId(), userUpdateParam);
+        final User user = userService.updateUser(claims.getUserId(), userUpdateParam);
+        final UserInfo userInfo = userModelAssembler.toModel(user);
 
         return ResponseEntity.ok(userInfo);
     }

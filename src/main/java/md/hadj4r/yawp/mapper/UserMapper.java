@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import static org.mapstruct.factory.Mappers.getMapper;
 
-@Mapper
+@Mapper(uses = AddressMapper.class)
 public interface UserMapper {
     UserMapper INSTANCE = getMapper(UserMapper.class);
 
@@ -30,7 +30,7 @@ public interface UserMapper {
             @Mapping(target = "lastName", source = "lastName"),
             @Mapping(target = "birthday", source = "birthday"),
             @Mapping(target = "about", source = "about"),
-            @Mapping(target = "address", source = "address.address"),
+            @Mapping(target = "address", source = "address"),
     })
     UserInfo map(User user);
 }
