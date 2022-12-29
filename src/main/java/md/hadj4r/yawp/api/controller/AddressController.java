@@ -1,5 +1,8 @@
 package md.hadj4r.yawp.api.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import md.hadj4r.yawp.api.dto.address.request.AddressUpdateParam;
@@ -24,6 +27,13 @@ public class AddressController {
     private final AddressModelAssembler addressModelAssembler;
 
     // TODO do we actually need a get request for addresses with current implementation?
+    @Operation(
+            summary = "Retrieve address info",
+            description = "Returns address info associated with current user"
+    )
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @Content(mediaType = "application/json")
+    )
     @GetMapping(produces = HAL_JSON_VALUE)
     public ResponseEntity<AddressInfo> getAddress(CustomClaims claims) {
         final Address address = addressService.getAddress(claims.getUserId());
@@ -32,6 +42,21 @@ public class AddressController {
         return ResponseEntity.ok(addressInfo);
     }
 
+    @Operation(
+            summary = "Update address info",
+            description = "Update address info associated with current user"
+    )
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @Content(mediaType = "application/json",
+                    examples = @ExampleObject(
+                            value = """
+                                    {
+                                    "address": "1600 Pennsylvania Avenue NW, Washington, DC 20500, USA"
+                                    }""",
+                            summary = "Address Update Example"
+                    )
+            )
+    )
     @PatchMapping(produces = HAL_JSON_VALUE)
     public ResponseEntity<AddressInfo> updateAddress(CustomClaims claims,
                                                      @Valid @RequestBody AddressUpdateParam addressUpdateParam) {

@@ -26,8 +26,18 @@ spring:
       password: supersecret!
       timeout: 60000
 
+
 security:
   jwt:
     token:
       lifetime: 86400000 # 24 hours
       secretKey: 08=-=(_KSDFodsf_+(_($_+1jd@$u- # should be changed to something more secure and retrieved from env variables
+
+
+api:
+  version: 1
+  base: /api/v1
+  description: Users API
+  server:
+    url: http://localhost:8080/
+#    eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huIiwiZXhwIjo5MjIzMzcyMDM2ODU0Nzc1LCJpYXQiOjE2NzIzMjM2NDksInVzZXJJZCI6ImY5NTEyZjI4LWFkMmMtNGIwYS1hOTA5LTY4OTdkOWJiNGI2NiJ9.DhdpF-ZZkGfU4Bp7DSuWJHPBTFAb8nL0sMGgkLhYHlM:

@@ -17,6 +17,11 @@ public class SecurityConfig {
     private static final String[] NO_AUTH_REQUIRED_PATHS = {
             "/api/v1/auth/login",
             "/api/v1/auth/signup",
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/swagger-ui.html",
+            "/swagger-ui/**",
     };
 
     private final JwtTokenFilter jwtTokenFilter;
