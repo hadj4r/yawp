@@ -11,7 +11,7 @@ import md.hadj4r.yawp.exception.CredentialsNotFoundException;
 import md.hadj4r.yawp.exception.PasswordsNotEqualException;
 import md.hadj4r.yawp.exception.UserAlreadyExistsException;
 import md.hadj4r.yawp.mapper.UserMapper;
-import md.hadj4r.yawp.model.User;
+import md.hadj4r.yawp.model.db.User;
 import md.hadj4r.yawp.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
     private static final String USER_NOT_FOUND = "User not found with current login or password";
     private static final String USER_ALREADY_EXISTS = "User with current login already exists";
-    private static final UserMapper MAPPER = UserMapper.MAPPER;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenService jwtTokenService;
@@ -56,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
             throw new BirthdayException("User must be at least 18 years old", HttpStatus.BAD_REQUEST);
         }
 
-        final User newUser = MAPPER.map(signUpParam);
+        final User newUser = UserMapper.INSTANCE.map(signUpParam);
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
 
         userRepository.save(newUser);
@@ -65,4 +64,5 @@ public class AuthServiceImpl implements AuthService {
 
         return new TokenInfo(token);
     }
+
 }

@@ -1,4 +1,4 @@
-package md.hadj4r.yawp.model;
+package md.hadj4r.yawp.model.db;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,6 +25,7 @@ public class Address {
     @GeneratedValue
     private UUID id;
 
+    // TODO so many possible improvements (split into separate columns, tables, etc.)
     @Column(name = "address", nullable = false)
     private String address;
 

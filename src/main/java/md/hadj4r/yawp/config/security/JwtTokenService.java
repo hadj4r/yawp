@@ -16,6 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import static io.jsonwebtoken.Jwts.parserBuilder;
 import static java.util.Base64.getEncoder;
+import static md.hadj4r.yawp.utils.Constants.USER_ID;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @Service
@@ -37,7 +38,7 @@ public class JwtTokenService {
 
         final long now = System.currentTimeMillis();
         final Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", userId.toString());
+        claims.put(USER_ID, userId.toString());
 
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
@@ -72,6 +73,6 @@ public class JwtTokenService {
 
     public Authentication getAuthentication(final String token) {
         final String login = getLogin(token);
-        return new CustomAuthenticationToken(login, getAllClaims(token));
+        return new CustomClaims(login, getAllClaims(token));
     }
 }

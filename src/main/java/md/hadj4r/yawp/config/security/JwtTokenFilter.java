@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import md.hadj4r.yawp.service.TokenBlacklistService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private final JwtTokenService jwtTokenService;
 
+    private final TokenBlacklistService tokenBlacklistService;
+
     @Override
     protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain) throws ServletException, IOException {
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -30,6 +33,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         // Get jwt token and validate
         final String token = header.substring(7);
         if (!jwtTokenService.validate(token)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        if (tokenBlacklistService.exists(token)) {
             filterChain.doFilter(request, response);
             return;
         }

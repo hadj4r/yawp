@@ -1,4 +1,4 @@
-package md.hadj4r.yawp.model;
+package md.hadj4r.yawp.model.db;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -43,6 +43,7 @@ public class User {
     @Column(name = "about")
     private String about;
 
+    // TODO may change to OneToMany association
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private Address address;
 

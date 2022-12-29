@@ -8,4 +8,5 @@ public interface AuthService {
     TokenInfo login(LoginParam loginParam);
 
     TokenInfo signup(SignUpParam signUpParam);
+
 }

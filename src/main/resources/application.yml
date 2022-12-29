@@ -12,8 +12,16 @@ spring:
     locations: classpath:db/migration
     enabled: true
 
+  data:
+    redis:
+      database: 0
+      host: localhost
+      port: 6379
+      password: supersecret!
+      timeout: 60000
+
 security:
   jwt:
     token:
-      lifetime: 86400 # 24 hours
+      lifetime: 86400000 # 24 hours
       secretKey: 08=-=(_KSDFodsf_+(_($_+1jd@$u- # should be changed to something more secure and retrieved from env variables

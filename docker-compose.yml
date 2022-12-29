@@ -13,3 +13,9 @@ services:
       POSTGRES_DB: yawp
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
+  cache:
+    image: redis:7.0.7
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass supersecret!

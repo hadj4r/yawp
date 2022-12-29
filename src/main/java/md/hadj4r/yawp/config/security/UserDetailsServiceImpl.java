@@ -3,7 +3,7 @@ package md.hadj4r.yawp.config.security;
 import java.util.HashSet;
 import lombok.RequiredArgsConstructor;
 import md.hadj4r.yawp.exception.UserNotFoundException;
-import md.hadj4r.yawp.model.User;
+import md.hadj4r.yawp.model.db.User;
 import md.hadj4r.yawp.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
