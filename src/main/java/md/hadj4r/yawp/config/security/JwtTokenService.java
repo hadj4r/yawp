@@ -1,17 +1,20 @@
 package md.hadj4r.yawp.config.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Header;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import java.security.Key;
 import java.util.Date;
-import javax.crypto.SecretKey;
-import md.hadj4r.yawp.exceptions.InvalidJWTException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import md.hadj4r.yawp.exception.InvalidJWTException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import static io.jsonwebtoken.Jwts.parserBuilder;
-import static io.jsonwebtoken.SignatureAlgorithm.HS256;
 import static java.util.Base64.getEncoder;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
@@ -29,19 +32,20 @@ public class JwtTokenService {
         this.secretKey = getEncoder().encode(secretKey.getBytes());
     }
 
-    public String createToken(final String login) {
-        final Claims claims = Jwts.claims().setSubject(login);
+    public String createToken(final String login, final UUID userId) {
+        final Key key = Keys.hmacShaKeyFor(secretKey);
 
-        final SecretKey key = Keys.hmacShaKeyFor(secretKey);
-        final Date now = new Date();
-        final Date lifetime = new Date(now.getTime() + lifetimeInMillis);
+        final long now = System.currentTimeMillis();
+        final Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", userId.toString());
 
         return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(lifetime)
-                .signWith(key, HS256)
-                .compact();
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setSubject(login)
+                .setExpiration(new Date(now + lifetimeInMillis))
+                .setIssuedAt(new Date(now))
+                .addClaims(claims)
+                .signWith(key).compact();
     }
 
     public boolean validate(final String token) {
@@ -54,8 +58,10 @@ public class JwtTokenService {
     }
 
     private Claims getAllClaims(final String token) {
+        final Key key = Keys.hmacShaKeyFor(secretKey);
+
         return parserBuilder()
-                .setSigningKey(secretKey)
+                .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token).getBody();
     }

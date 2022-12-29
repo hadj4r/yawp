@@ -1,4 +1,4 @@
-package md.hadj4r.yawp.exceptions;
+package md.hadj4r.yawp.exception;
 
 import org.springframework.http.HttpStatus;
 

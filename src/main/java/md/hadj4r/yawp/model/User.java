@@ -1,8 +1,12 @@
-package md.hadj4r.yawp.models;
+package md.hadj4r.yawp.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -22,6 +26,7 @@ import lombok.Setter;
 public class User {
 
     @Id
+    @GeneratedValue
     private UUID id;
 
     @Column(name = "first_name", nullable = false)
@@ -33,7 +38,16 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
     @Temporal(TemporalType.DATE)
+    @Column(name = "birthday", nullable = false)
     private LocalDate birthday;
     @Column(name = "about")
     private String about;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    private Address address;
+
+    public void setAddress(Address address) {
+        this.address = address;
+        address.setUser(this);
+    }
 }

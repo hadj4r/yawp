@@ -14,22 +14,30 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private static final String[] NO_AUTH_REQUIRED_PATHS = {
+            "/api/v1/auth/login",
+            "/api/v1/auth/signup",
+    };
 
     private final JwtTokenFilter jwtTokenFilter;
 
     @Bean
     public SecurityFilterChain securityWebFilterChain(final HttpSecurity http) throws Exception {
-        return http
+        http
                 .httpBasic().disable()
                 .formLogin().disable()
                 .logout().disable()
-                .csrf().disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .addFilterAt(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+                .csrf().disable();
+
+        http
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers(NO_AUTH_REQUIRED_PATHS).permitAll()
+                        .anyRequest().authenticated());
+
+        http
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
     }
 
     @Bean
