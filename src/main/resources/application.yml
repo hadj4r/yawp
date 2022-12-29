@@ -12,3 +12,8 @@ spring:
     locations: classpath:db/migration
     enabled: true
 
+security:
+  jwt:
+    token:
+      lifetime: 86400 # 24 hours
+      secretKey: 08=-=(_KSDFodsf_+(_($_+1jd@$u- # should be changed to something more secure and retrieved from env variables
