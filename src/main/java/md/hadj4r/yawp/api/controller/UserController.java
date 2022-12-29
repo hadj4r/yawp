@@ -1,12 +1,15 @@
 package md.hadj4r.yawp.api.controller;
 
 import lombok.RequiredArgsConstructor;
+import md.hadj4r.yawp.api.dto.user.request.UserUpdateParam;
 import md.hadj4r.yawp.api.dto.user.response.UserInfo;
 import md.hadj4r.yawp.config.security.CustomClaims;
 import md.hadj4r.yawp.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,5 +34,12 @@ public class UserController {
         userService.deleteUser(bearerToken, claims);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping
+    public ResponseEntity<UserInfo> updateUser(CustomClaims claims, @RequestBody UserUpdateParam userUpdateParam) {
+        final UserInfo userInfo = userService.updateUser(claims.getUserId(), userUpdateParam);
+
+        return ResponseEntity.ok(userInfo);
     }
 }
